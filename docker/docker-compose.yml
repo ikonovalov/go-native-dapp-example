@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+
+  solc:
+    image: ethereum/solc:stable
+    volumes:
+      - "../contracts/src:/tmp/eth/contracts/src:ro"
+      - "../contracts/gen:/tmp/eth/contracts/gen:rw"
+    command: --overwrite -o /tmp/eth/contracts/gen --bin --opcodes --hashes --abi --metadata /tmp/eth/contracts/src/Greeter.sol
