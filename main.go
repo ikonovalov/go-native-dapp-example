@@ -9,6 +9,9 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/crypto"
+	"context"
+	"time"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 func main() {
@@ -25,9 +28,26 @@ func main() {
 	}
 
 	fmt.Printf("Deploy transaction: %s\n", tx.Hash().String())
-	fmt.Printf("Contract   address: %s\n", addr.Hash().String())
-	fmt.Println("Mining...")
+	fmt.Printf("Contract   address: %s\n", addr.String())
+
+	mined := make(chan common.Address)
+	ctx := context.Background()
+
+	go func() {
+		fmt.Println("Wait deployed...")
+		address, _ := bind.WaitDeployed(ctx, sim, tx)
+		mined <- address
+		close(mined)
+	}()
+
 	sim.Commit()
+
+	select {
+	case a := <-mined:
+		fmt.Printf("Mined! %s\n", a.String())
+	case <-time.After(20 * time.Second):
+		fmt.Errorf("timeout")
+	}
 
 	opts := auth
 	tx, err = contract.Greet(opts, "h2")
