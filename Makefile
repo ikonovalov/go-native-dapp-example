@@ -11,3 +11,5 @@ solc-compile-shutdown:
 	 docker-compose -f ${DC_FILE} down
 gen-bind:
 	${ETH_TOOLS}/abigen -abi ./contracts/gen/Greeter.abi -bin ./contracts/gen/Greeter.bin -pkg greeter -lang go -out contracts/gen/greeter.go
+build: 
+	go build -o bin/dapp .

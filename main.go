@@ -24,11 +24,18 @@ func main() {
 		log.Fatalf("could not deploy contract: %v", err)
 	}
 
-	fmt.Println(addr, tx, contract)
+	fmt.Printf("Deploy transaction: %s\n", tx.Hash().String())
+	fmt.Printf("Contract   address: %s\n", addr.Hash().String())
 	fmt.Println("Mining...")
 	sim.Commit()
 
+	opts := auth
+	tx, err = contract.Greet(opts, "h2")
+	fmt.Printf("tx=%s\n", tx.Hash().String())
+	sim.Commit()
+	name, err := contract.Name(nil)
 	cnt, err := contract.Count(nil)
-	fmt.Println(cnt)
+	fmt.Println("Name=", name)
+	fmt.Println("Count=", cnt)
 
 }
