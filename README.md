@@ -1,6 +1,11 @@
 Golang native ethereum DAPP example
 ==========================
-Best ingredients:
+### Requirements
+* Docker and Docker-compose
+* Golang
+* [Mythril (security analysis tool)](https://github.com/ConsenSys/mythril) 
+
+### Best ingredients:
 * Solidity
 * Golang
 * Docker
